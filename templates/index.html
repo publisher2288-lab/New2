@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>मेरा खुद का AI</title>
+    <script src="https://tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white flex flex-col h-screen font-sans">
+    <header class="bg-gray-800 p-4 text-center text-xl font-bold border-b border-gray-700">🤖 मेरा डोमेन, मेरा AI</header>
+    <div id="chat-box" class="flex-1 p-4 overflow-y-auto space-y-4 max-w-2xl mx-auto w-full"></div>
+    <div class="p-4 bg-gray-800 border-t border-gray-700 max-w-2xl mx-auto w-full flex gap-2 mb-4 rounded-lg">
+        <input id="user-input" type="text" placeholder="यहाँ टाइप करें..." class="flex-1 p-2 rounded bg-gray-700 border border-gray-600 focus:outline-none">
+        <button onclick="sendMessage()" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded font-bold">भेजें</button>
+    </div>
+    <script>
+        async function sendMessage() {
+            const input = document.getElementById('user-input');
+            const chatBox = document.getElementById('chat-box');
+            if(!input.value.trim()) return;
+            
+            chatBox.innerHTML += `<div class="text-right"><span class="bg-blue-600 p-2 rounded inline-block">${input.value}</span></div>`;
+            const text = input.value;
+            input.value = '';
+
+            const res = await fetch('/ask', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({message: text})
+            });
+            const data = await res.json();
+            chatBox.innerHTML += `<div class="text-left"><span class="bg-gray-700 p-2 rounded inline-block">${data.reply}</span></div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
+</body>
+</html>
