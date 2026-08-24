@@ -26,8 +26,8 @@ async def head_item():
 async def ask_ai(data: dict):
     user_message = data.get("message", "")
     try:
-        # यहाँ पुराना gemini-1.5 हटाकर नया gemini-2.5-flash मॉडल कर दिया गया है
-        model = genai.GenerativeModel("gemini-2.5-flash")
+        # यहाँ सबसे नया और आधिकारिक gemini-3.6-flash मॉडल सेट कर दिया गया है
+        model = genai.GenerativeModel("gemini-3.6-flash")
         response = model.generate_content(user_message)
         return {"reply": response.text}
     except Exception as e:
