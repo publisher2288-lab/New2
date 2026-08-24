@@ -18,7 +18,6 @@ templates = Jinja2Templates(directory="templates")
 async def read_item(request: Request):
     return templates.TemplateResponse(request, "index.html")
 
-# HEAD एरर को ठीक करने के लिए नया रूट
 @app.head("/")
 async def head_item():
     return HTMLResponse(content="", status_code=200)
@@ -27,7 +26,8 @@ async def head_item():
 async def ask_ai(data: dict):
     user_message = data.get("message", "")
     try:
-        model = genai.GenerativeModel("gemini-1.5-flash-latest")
+        # यहाँ सबसे स्थिर और सही मॉडल नाम दिया गया है
+        model = genai.GenerativeModel(model_name="gemini-1.5-flash")
         response = model.generate_content(user_message)
         return {"reply": response.text}
     except Exception as e:
