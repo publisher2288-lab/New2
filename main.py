@@ -1,26 +1,31 @@
 import os
-from io import BytesIO
 
 from fastapi import FastAPI, Request, UploadFile, File, Form
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
-import google.generativeai as genai
-from PIL import Image
+from google import genai
+from google.genai import types
 
 
 app = FastAPI()
 
 # =========================================================
-# GEMINI
+# GEMINI CLIENT
 # =========================================================
 
-API_KEY = os.getenv(
-    "GEMINI_API_KEY",
-    "YOUR_FALLBACK_KEY"
+API_KEY = os.getenv("GEMINI_API_KEY")
+
+if not API_KEY:
+    raise RuntimeError("GEMINI_API_KEY environment variable नहीं मिली।")
+
+client = genai.Client(
+    api_key=API_KEY
 )
 
-genai.configure(api_key=API_KEY)
+# =========================================================
+# TEMPLATES
+# =========================================================
 
 templates = Jinja2Templates(
     directory="templates"
@@ -33,6 +38,7 @@ templates = Jinja2Templates(
 
 @app.get("/", response_class=HTMLResponse)
 async def read_item(request: Request):
+
     return templates.TemplateResponse(
         request,
         "index.html"
@@ -41,6 +47,7 @@ async def read_item(request: Request):
 
 @app.head("/")
 async def head_item():
+
     return HTMLResponse(
         content="",
         status_code=200
@@ -53,173 +60,107 @@ async def head_item():
 # =========================================================
 
 @app.post("/ask")
-async def ask_ai(request: Request):
+async def ask_ai(
+    message: str = Form(""),
+    file: UploadFile | None = File(None)
+):
 
     try:
 
-        content_type = request.headers.get(
-            "content-type",
-            ""
-        )
+        message = (message or "").strip()
 
         # =================================================
-        # OLD JSON REQUEST
+        # IMAGE REQUEST
         # =================================================
 
-        if "application/json" in content_type:
+        if file is not None:
 
-            data = await request.json()
+            # MIME TYPE
+            mime_type = file.content_type or ""
 
-            user_message = data.get(
-                "message",
-                ""
-            )
-
-            if not user_message:
-                return {
-                    "reply": "कृपया अपना सवाल लिखें।"
-                }
-
-            model = genai.GenerativeModel(
-                "gemini-3.6-flash"
-            )
-
-            response = model.generate_content(
-                user_message
-            )
-
-            return {
-                "reply": response.text
-            }
-
-
-        # =================================================
-        # NEW MULTIPART REQUEST
-        # =================================================
-
-        form = await request.form()
-
-        user_message = form.get(
-            "message",
-            ""
-        )
-
-        uploaded_file = form.get(
-            "file"
-        )
-
-
-        # Text नहीं और image भी नहीं
-        if (
-            not user_message
-            and not isinstance(
-                uploaded_file,
-                UploadFile
-            )
-        ):
-
-            return {
-                "reply":
-                "कृपया सवाल लिखें या image attach करें।"
-            }
-
-
-        model = genai.GenerativeModel(
-            "gemini-3.6-flash"
-        )
-
-
-        # =================================================
-        # IMAGE + TEXT
-        # =================================================
-
-        if isinstance(
-            uploaded_file,
-            UploadFile
-        ):
-
-            # केवल image स्वीकार करें
-            if not uploaded_file.content_type.startswith(
-                "image/"
-            ):
+            if not mime_type.startswith("image/"):
 
                 return {
                     "reply":
-                    "अभी केवल JPG, PNG, WEBP जैसी image files upload करें।"
+                    "कृपया JPG, PNG या WEBP image upload करें।"
                 }
 
 
-            # 10 MB limit
-            file_bytes = await uploaded_file.read()
+            # IMAGE BYTES
+            image_bytes = await file.read()
 
-            if len(file_bytes) > 10 * 1024 * 1024:
+
+            # 10 MB LIMIT
+            if len(image_bytes) > 10 * 1024 * 1024:
 
                 return {
                     "reply":
-                    "Image का size 10 MB से ज्यादा है। कृपया छोटी image upload करें।"
+                    "Image 10 MB से बड़ी है। कृपया छोटी image upload करें।"
                 }
 
 
-            try:
+            # DEFAULT PROMPT
+            if not message:
 
-                image = Image.open(
-                    BytesIO(file_bytes)
-                )
-
-                # Gemini-compatible RGB conversion
-                if image.mode not in (
-                    "RGB",
-                    "RGBA"
-                ):
-
-                    image = image.convert(
-                        "RGB"
-                    )
-
-
-            except Exception:
-
-                return {
-                    "reply":
-                    "Image पढ़ी नहीं जा सकी। कृपया दूसरी image try करें।"
-                }
-
-
-            prompt = user_message.strip()
-
-            if not prompt:
-
-                prompt = (
-                    "इस image को ध्यान से देखें "
-                    "और मुझे बताएं कि इसमें क्या दिखाई दे रहा है।"
+                message = (
+                    "इस image को ध्यान से देखकर बताइए "
+                    "कि इसमें क्या दिखाई दे रहा है। "
+                    "अगर image में text है तो उसे भी पढ़कर बताइए।"
                 )
 
 
-            response = model.generate_content(
-                [
-                    prompt,
-                    image
+            # =================================================
+            # GEMINI MULTIMODAL REQUEST
+            # =================================================
+
+            image_part = types.Part.from_bytes(
+                data=image_bytes,
+                mime_type=mime_type
+            )
+
+
+            response = client.models.generate_content(
+
+                model="gemini-3.7-flash",
+
+                contents=[
+                    message,
+                    image_part
                 ]
+
             )
 
 
             return {
                 "reply":
-                response.text
+                response.text or "Image का जवाब नहीं मिला।"
             }
 
 
         # =================================================
-        # TEXT ONLY MULTIPART
+        # TEXT ONLY
         # =================================================
 
-        response = model.generate_content(
-            user_message
+        if not message:
+
+            return {
+                "reply":
+                "कृपया अपना सवाल लिखें या image attach करें।"
+            }
+
+
+        response = client.models.generate_content(
+
+            model="gemini-3.7-flash",
+
+            contents=message
+
         )
+
 
         return {
             "reply":
-            response.text
+            response.text or "कोई जवाब नहीं मिला।"
         }
 
 
@@ -230,7 +171,8 @@ async def ask_ai(request: Request):
             repr(e)
         )
 
+
         return {
             "reply":
-            f"Error: {str(e)}"
+            "AI Server Error: " + str(e)
         }
