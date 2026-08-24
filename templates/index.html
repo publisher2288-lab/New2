@@ -5,23 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OrangeChat AI</title>
     <style>
+        /* CSS वेरिएबल्स - थीम बदलने के लिए */
+        :root {
+            --bg-body: #fcefe9;
+            --bg-card: #ffffff;
+            --bg-chatbox: #fff9f6;
+            --text-main: #2d3748;
+            --border-card: #ffdcd0;
+            --border-input: #ffcdbc;
+            --bg-input: #fffbf9;
+            --msg-ai-bg: #ffffff;
+            --msg-ai-border: #ffe1d5;
+            --mic-bg: #fff1eb;
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #121212;
+            --bg-card: #1e1e1e;
+            --bg-chatbox: #181818;
+            --text-main: #e2e8f0;
+            --border-card: #2d2d2d;
+            --border-input: #4a4a4a;
+            --bg-input: #252525;
+            --msg-ai-bg: #2d2d2d;
+            --msg-ai-border: #3d3d3d;
+            --mic-bg: #2d2d2d;
+        }
+
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #fcefe9; display: flex; justify-content: center; align-items: center; min-h: 100vh; height: 100vh; padding: 10px; }
-        .chat-card { width: 100%; max-width: 480px; height: 90vh; bg-color: #ffffff; background: #ffffff; border-radius: 20px; shadow: 0 10px 25px rgba(255,107,53,0.15); box-shadow: 0 10px 25px rgba(255,107,53,0.15); display: flex; flex-direction: column; overflow: hidden; border: 1px solid #ffdcd0; }
+        body { background-color: var(--bg-body); display: flex; justify-content: center; align-items: center; min-h: 100vh; height: 100vh; padding: 10px; transition: background-color 0.3s; }
+        .chat-card { width: 100%; max-width: 480px; height: 90vh; background: var(--bg-card); border-radius: 20px; box-shadow: 0 10px 25px rgba(255,107,53,0.15); display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--border-card); transition: background 0.3s, border-color 0.3s; }
         .header { background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%); color: white; padding: 20px; display: flex; align-items: center; justify-content: space-between; }
         .header-title { font-size: 1.2rem; font-weight: bold; display: flex; align-items: center; gap: 10px; }
         .status { font-size: 0.75rem; color: #ffe5d9; margin-top: 2px; }
+        .header-actions { display: flex; align-items: center; gap: 8px; }
+        
+        /* नया थीम टॉगल बटन स्टाइल */
+        .theme-btn { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); padding: 4px 8px; border-radius: 20px; cursor: pointer; font-size: 0.9rem; transition: background 0.2s; }
+        .theme-btn:hover { background: rgba(255,255,255,0.3); }
+        
         .badge { background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; border: 1px solid rgba(255,255,255,0.3); }
-        .chat-box { flex: 1; padding: 20px; overflow-y: auto; background-color: #fff9f6; display: flex; flex-direction: column; gap: 15px; }
-        .msg { max-width: 85%; padding: 12px 16px; border-radius: 16px; font-size: 0.95rem; line-height: 1.5; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-        .ai { background-color: white; color: #2d3748; border-bottom-left-radius: 2px; border: 1px solid #ffe1d5; align-self: flex-start; }
+        .chat-box { flex: 1; padding: 20px; overflow-y: auto; background-color: var(--bg-chatbox); display: flex; flex-direction: column; gap: 15px; transition: background-color 0.3s; }
+        .msg { max-width: 85%; padding: 12px 16px; border-radius: 16px; font-size: 0.95rem; line-height: 1.5; box-shadow: 0 2px 5px rgba(0,0,0,0.02); color: var(--text-main); }
+        .ai { background-color: var(--msg-ai-bg); border-bottom-left-radius: 2px; border: 1px solid var(--msg-ai-border); align-self: flex-start; transition: background-color 0.3s, border-color 0.3s; }
         .user { background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%); color: white; border-bottom-right-radius: 2px; align-self: flex-end; }
-        .input-area { padding: 15px; background: white; border-top: 1px solid #ffe1d5; display: flex; gap: 10px; }
-        input { flex: 1; padding: 12px 15px; border-radius: 12px; border: 1px solid #ffcdbc; background-color: #fffbf9; outline: none; font-size: 0.95rem; transition: all 0.3s; }
+        .input-area { padding: 15px; background: var(--bg-card); border-top: 1px solid var(--msg-ai-border); display: flex; gap: 10px; align-items: center; transition: background 0.3s, border-color 0.3s; }
+        input { flex: 1; padding: 12px 15px; border-radius: 12px; border: 1px solid var(--border-input); background-color: var(--bg-input); color: var(--text-main); outline: none; font-size: 0.95rem; transition: all 0.3s; }
         input:focus { border-color: #ff6b35; box-shadow: 0 0 0 3px rgba(255,107,53,0.1); }
-        button { background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: bold; font-size: 0.95rem; cursor: pointer; transition: transform 0.1s, opacity 0.2s; box-shadow: 0 4px 10px rgba(255,107,53,0.2); }
-        button:hover { opacity: 0.95; }
-        button:active { transform: scale(0.97); }
+        
+        /* माइक बटन स्टाइल */
+        .mic-btn { background: var(--mic-bg); color: #ff6b35; border: 1px solid var(--border-input); padding: 12px; border-radius: 12px; font-size: 1.1rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+        .mic-btn.listening { background: #e53e3e; color: white; border-color: #e53e3e; animation: pulse 1.5s infinite; }
+        
+        button.send-btn { background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: bold; font-size: 0.95rem; cursor: pointer; transition: transform 0.1s, opacity 0.2s; box-shadow: 0 4px 10px rgba(255,107,53,0.2); }
+        button.send-btn:hover { opacity: 0.95; }
+        button.send-btn:active { transform: scale(0.97); }
         .loading { font-style: italic; color: #ff8c42; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
     </style>
@@ -29,69 +67,140 @@
 <body>
 
     <div class="chat-card">
-        <!-- प्रीमियम ऑरेंज हेडर -->
         <div class="header">
             <div>
                 <div class="header-title"><span>🤖</span> ASKGEMI AI</div>
                 <div class="status">● हमेशा ऑनलाइन • आपकी सहायता के लिए तैयार</div>
             </div>
-            <div class="badge">Gemini 3.6</div>
+            <div class="header-actions">
+                <!-- थीम बदलने का नया बटन -->
+                <button class="theme-btn" onclick="toggleTheme()" id="theme-btn" title="थीम बदलें">🌙</button>
+                <div class="badge">Gemini 3.6</div>
+            </div>
         </div>
 
-        <!-- चैट मैसेजेस एरिया -->
         <div id="chat-box" class="chat-box">
             <div class="msg ai">
                 नमस्ते! मैं आपका नया सुपर स्टाइलिश असिस्टेंट हूँ। विनीत गुप्ता के बनाये AI में आपका स्वागत है 
             </div>
         </div>
 
-        <!-- इनपुट और बटन एरिया -->
         <div class="input-area">
             <input id="user-input" type="text" placeholder="अपना संदेश यहाँ टाइप करें..." onkeypress="if(event.key === 'Enter') sendMessage()">
-            <button onclick="sendMessage()">भेजें</button>
+            <button id="mic-btn" class="mic-btn" onclick="toggleVoice()" title="Hindi/English में बोलें">🎙️</button>
+            <button class="send-btn" onclick="sendMessage()">भेजें</button>
         </div>
     </div>
 
     <script>
+        // थीम टॉगल लॉजिक
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const themeBtn = document.getElementById('theme-btn');
+            
+            if (currentTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                themeBtn.innerText = '🌙';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeBtn.innerText = '☀️';
+            }
+        }
+
+        // वॉइस रिकग्निशन (Mic) सेटअप
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let recognition = null;
+        let isListening = false;
+
+        if (SpeechRecognition) {
+            recognition = new SpeechRecognition();
+            recognition.continuous = false; 
+            recognition.interimResults = false; 
+            recognition.lang = 'hi-IN'; 
+
+            recognition.onstart = () => {
+                isListening = true;
+                const micBtn = document.getElementById('mic-btn');
+                micBtn.classList.add('listening');
+                micBtn.innerText = '🛑'; 
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = event.results.transcript;
+                document.getElementById('user-input').value = transcript;
+            };
+
+            recognition.onerror = (event) => {
+                console.error("माइक त्रुटि: ", event.error);
+                stopListening();
+            };
+
+            recognition.onend = () => {
+                stopListening();
+            };
+        } else {
+            document.getElementById('mic-btn').style.display = 'none';
+        }
+
+        function toggleVoice() {
+            if (!recognition) return;
+            window.speechSynthesis.cancel(); 
+            
+            if (isListening) {
+                recognition.stop();
+            } else {
+                recognition.start();
+            }
+        }
+
+        function stopListening() {
+            isListening = false;
+            const micBtn = document.getElementById('mic-btn');
+            micBtn.classList.remove('listening');
+            micBtn.innerText = '🎙️';
+        }
+
+        // टेक्स्ट-टू-स्पीच (AI Voice Reply) फंक्शन
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); 
+
+                const utterance = new SpeechSynthesisUtterance(text);
+                const isEnglish = /^[A-Za-z0-9\s,.?!]+$/.test(text);
+                utterance.lang = isEnglish ? 'en-US' : 'hi-IN';
+                utterance.rate = 1.0;  
+                utterance.pitch = 1.0; 
+                
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // संदेश भेजने का लॉजिक
         async function sendMessage() {
             const input = document.getElementById('user-input');
             const chatBox = document.getElementById('chat-box');
-            if(!input.value.trim()) return;
+            const text = input.value.trim();
             
-            const text = input.value;
+            if(!text) return;
             input.value = '';
 
-            // 1. यूजर का मैसेज स्क्रीन पर जोड़ना
-            chatBox.innerHTML += `<div class="msg user">${text}</div>`;
+            if(isListening) recognition.stop();
+            window.speechSynthesis.cancel(); 
+
+            const userMsg = document.createElement('div');
+            userMsg.className = 'msg user';
+            userMsg.textContent = text;
+            chatBox.appendChild(userMsg);
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // लोडिंग दिखाना
             const loadingId = 'loading-' + Date.now();
-            chatBox.innerHTML += `<div id="${loadingId}" class="msg ai loading">एआई सोच रहा है...</div>`;
+            const loadingEl = document.createElement('div');
+            loadingEl.className = 'msg ai loading';
+            loadingEl.id = loadingId;
+            loadingEl.textContent = 'एआई सोच रहा है...';
+            chatBox.appendChild(loadingEl);
             chatBox.scrollTop = chatBox.scrollHeight;
 
             try {
-                // 2. बैकएंड से बात करना
                 const res = await fetch('/ask', {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({message: text})
-                });
-                const data = await res.json();
-                
-                // लोडिंग हटाना
-                const loadingEl = document.getElementById(loadingId);
-                if(loadingEl) loadingEl.remove();
-
-                // 3. AI का जवाब स्क्रीन पर जोड़ना
-                chatBox.innerHTML += `<div class="msg ai">${data.reply}</div>`;
-            } catch (error) {
-                const loadingEl = document.getElementById(loadingId);
-                if(loadingEl) loadingEl.remove();
-                chatBox.innerHTML += `<div class="msg ai" style="color: red;">त्रुटि: कनेक्शन में समस्या आई।</div>`;
-            }
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-    </script>
-</body>
-</html>
