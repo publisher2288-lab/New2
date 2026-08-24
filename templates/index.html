@@ -1,206 +1,1946 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="hi" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OrangeChat AI</title>
-    <style>
-        /* CSS वेरिएबल्स - थीम बदलने के लिए */
-        :root {
-            --bg-body: #fcefe9;
-            --bg-card: #ffffff;
-            --bg-chatbox: #fff9f6;
-            --text-main: #2d3748;
-            --border-card: #ffdcd0;
-            --border-input: #ffcdbc;
-            --bg-input: #fffbf9;
-            --msg-ai-bg: #ffffff;
-            --msg-ai-border: #ffe1d5;
-            --mic-bg: #fff1eb;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        [data-theme="dark"] {
-            --bg-body: #121212;
-            --bg-card: #1e1e1e;
-            --bg-chatbox: #181818;
-            --text-main: #e2e8f0;
-            --border-card: #2d2d2d;
-            --border-input: #4a4a4a;
-            --bg-input: #252525;
-            --msg-ai-bg: #2d2d2d;
-            --msg-ai-border: #3d3d3d;
-            --mic-bg: #2d2d2d;
-        }
+<title>OrangeChat AI</title>
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-body); display: flex; justify-content: center; align-items: center; min-h: 100vh; height: 100vh; padding: 10px; transition: background-color 0.3s; }
-        .chat-card { width: 100%; max-width: 480px; height: 90vh; background: var(--bg-card); border-radius: 20px; box-shadow: 0 10px 25px rgba(255,107,53,0.15); display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--border-card); transition: background 0.3s, border-color 0.3s; }
-        .header { background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%); color: white; padding: 20px; display: flex; align-items: center; justify-content: space-between; }
-        .header-title { font-size: 1.2rem; font-weight: bold; display: flex; align-items: center; gap: 10px; }
-        .status { font-size: 0.75rem; color: #ffe5d9; margin-top: 2px; }
-        .header-actions { display: flex; align-items: center; gap: 8px; }
-        
-        /* नया थीम टॉगल बटन स्टाइल */
-        .theme-btn { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); padding: 4px 8px; border-radius: 20px; cursor: pointer; font-size: 0.9rem; transition: background 0.2s; }
-        .theme-btn:hover { background: rgba(255,255,255,0.3); }
-        
-        .badge { background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; border: 1px solid rgba(255,255,255,0.3); }
-        .chat-box { flex: 1; padding: 20px; overflow-y: auto; background-color: var(--bg-chatbox); display: flex; flex-direction: column; gap: 15px; transition: background-color 0.3s; }
-        .msg { max-width: 85%; padding: 12px 16px; border-radius: 16px; font-size: 0.95rem; line-height: 1.5; box-shadow: 0 2px 5px rgba(0,0,0,0.02); color: var(--text-main); }
-        .ai { background-color: var(--msg-ai-bg); border-bottom-left-radius: 2px; border: 1px solid var(--msg-ai-border); align-self: flex-start; transition: background-color 0.3s, border-color 0.3s; }
-        .user { background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%); color: white; border-bottom-right-radius: 2px; align-self: flex-end; }
-        .input-area { padding: 15px; background: var(--bg-card); border-top: 1px solid var(--msg-ai-border); display: flex; gap: 10px; align-items: center; transition: background 0.3s, border-color 0.3s; }
-        input { flex: 1; padding: 12px 15px; border-radius: 12px; border: 1px solid var(--border-input); background-color: var(--bg-input); color: var(--text-main); outline: none; font-size: 0.95rem; transition: all 0.3s; }
-        input:focus { border-color: #ff6b35; box-shadow: 0 0 0 3px rgba(255,107,53,0.1); }
-        
-        /* माइक बटन स्टाइल */
-        .mic-btn { background: var(--mic-bg); color: #ff6b35; border: 1px solid var(--border-input); padding: 12px; border-radius: 12px; font-size: 1.1rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
-        .mic-btn.listening { background: #e53e3e; color: white; border-color: #e53e3e; animation: pulse 1.5s infinite; }
-        
-        button.send-btn { background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: bold; font-size: 0.95rem; cursor: pointer; transition: transform 0.1s, opacity 0.2s; box-shadow: 0 4px 10px rgba(255,107,53,0.2); }
-        button.send-btn:hover { opacity: 0.95; }
-        button.send-btn:active { transform: scale(0.97); }
-        .loading { font-style: italic; color: #ff8c42; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
-    </style>
+<style>
+/* =========================================================
+   ORANGECHAT AI - PREMIUM FRONTEND
+   Backend/API को कोई बदलाव नहीं
+   ========================================================= */
+
+:root {
+    --bg: #212121;
+    --sidebar: #171717;
+    --surface: #2f2f2f;
+    --surface-hover: #3a3a3a;
+    --border: #424242;
+
+    --text: #ececec;
+    --muted: #a7a7a7;
+
+    --orange: #ff6b35;
+    --orange-dark: #e85b27;
+
+    --user: #303030;
+
+    --danger: #ef4444;
+
+    --shadow:
+        0 10px 30px rgba(0,0,0,.20);
+}
+
+[data-theme="light"] {
+    --bg: #ffffff;
+    --sidebar: #f7f7f8;
+    --surface: #f1f1f1;
+    --surface-hover: #e8e8e8;
+    --border: #dedede;
+
+    --text: #171717;
+    --muted: #666;
+
+    --user: #f1f1f1;
+
+    --shadow:
+        0 10px 30px rgba(0,0,0,.08);
+}
+
+/* RESET */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
+    background: var(--bg);
+    color: var(--text);
+
+    overflow: hidden;
+
+    transition:
+        background .25s ease,
+        color .25s ease;
+}
+
+button,
+textarea {
+    font-family: inherit;
+}
+
+/* =========================================================
+   APP
+   ========================================================= */
+
+.app {
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+
+    background: var(--bg);
+}
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.sidebar {
+    width: 270px;
+    height: 100vh;
+
+    background: var(--sidebar);
+
+    border-right: 1px solid var(--border);
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 14px;
+
+    transition:
+        transform .25s ease,
+        background .25s ease;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 8px 6px 18px;
+}
+
+.brand-logo {
+    width: 36px;
+    height: 36px;
+
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff8a4c,
+            #ff5a1f
+        );
+
+    color: #fff;
+
+    font-weight: 800;
+    font-size: 18px;
+
+    box-shadow:
+        0 5px 18px rgba(255,107,53,.25);
+}
+
+.brand-name {
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.brand-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+}
+
+/* NEW CHAT */
+
+.new-chat-btn {
+    width: 100%;
+
+    padding: 11px 14px;
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    background: transparent;
+
+    color: var(--text);
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    font-size: 14px;
+
+    transition: .2s;
+}
+
+.new-chat-btn:hover {
+    background: var(--surface-hover);
+    border-color: #555;
+}
+
+.new-chat-icon {
+    font-size: 18px;
+}
+
+/* HISTORY */
+
+.history-title {
+    color: var(--muted);
+
+    font-size: 11px;
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+    padding: 20px 8px 8px;
+}
+
+.history-list {
+    flex: 1;
+
+    overflow-y: auto;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+.history-item {
+    padding: 10px 11px;
+
+    border-radius: 8px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+
+    cursor: pointer;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    transition: .2s;
+}
+
+.history-item:hover {
+    background: var(--surface-hover);
+    color: var(--text);
+}
+
+/* SIDEBAR FOOTER */
+
+.sidebar-footer {
+    border-top: 1px solid var(--border);
+
+    padding-top: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.version-text {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.theme-toggle {
+    width: 34px;
+    height: 34px;
+
+    border: 0;
+    border-radius: 8px;
+
+    background: transparent;
+
+    color: var(--text);
+
+    cursor: pointer;
+
+    font-size: 17px;
+
+    transition: .2s;
+}
+
+.theme-toggle:hover {
+    background: var(--surface-hover);
+}
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+.main {
+    flex: 1;
+
+    min-width: 0;
+
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+}
+
+/* =========================================================
+   TOP BAR
+   ========================================================= */
+
+.topbar {
+    height: 58px;
+
+    flex-shrink: 0;
+
+    border-bottom: 1px solid var(--border);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 22px;
+
+    background: var(--bg);
+}
+
+.top-left {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+}
+
+.mobile-menu {
+    display: none;
+
+    width: 36px;
+    height: 36px;
+
+    border: 0;
+    border-radius: 8px;
+
+    background: transparent;
+
+    color: var(--text);
+
+    font-size: 20px;
+
+    cursor: pointer;
+}
+
+.mobile-menu:hover {
+    background: var(--surface);
+}
+
+.chat-title {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.model-badge {
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+
+    color: var(--muted);
+
+    font-size: 11px;
+}
+
+/* =========================================================
+   CHAT
+   ========================================================= */
+
+.chat-container {
+    flex: 1;
+
+    overflow-y: auto;
+
+    padding: 25px 15px 160px;
+
+    scroll-behavior: smooth;
+}
+
+/* SCROLLBAR */
+
+.chat-container::-webkit-scrollbar,
+.history-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-container::-webkit-scrollbar-thumb,
+.history-list::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 10px;
+}
+
+/* MESSAGE ROW */
+
+.message-row {
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+
+    padding: 14px 10px;
+}
+
+.message-content {
+    width: 100%;
+    max-width: 820px;
+
+    display: flex;
+
+    gap: 13px;
+
+    line-height: 1.65;
+
+    font-size: 15px;
+}
+
+/* AVATAR */
+
+.avatar {
+    width: 34px;
+    height: 34px;
+
+    flex-shrink: 0;
+
+    border-radius: 9px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.avatar.ai {
+    background:
+        linear-gradient(
+            135deg,
+            #ff8a4c,
+            #ff5a1f
+        );
+
+    color: white;
+
+    box-shadow:
+        0 4px 12px rgba(255,107,53,.2);
+}
+
+.avatar.user {
+    background:
+        linear-gradient(
+            135deg,
+            #6d5dfc,
+            #5144c9
+        );
+
+    color: white;
+}
+
+/* TEXT */
+
+.text-wrapper {
+    flex: 1;
+
+    min-width: 0;
+
+    padding-top: 4px;
+
+    white-space: pre-wrap;
+
+    word-break: break-word;
+}
+
+/* USER MESSAGE */
+
+.user-row .message-content {
+    justify-content: flex-end;
+}
+
+.user-row .avatar {
+    order: 2;
+}
+
+.user-row .text-wrapper {
+    flex: initial;
+
+    max-width: min(75%, 650px);
+
+    background: var(--user);
+
+    border-radius: 16px;
+
+    padding: 11px 15px;
+}
+
+/* AI RESPONSE */
+
+.ai-row .text-wrapper {
+    position: relative;
+}
+
+/* =========================================================
+   MESSAGE ACTIONS
+   ========================================================= */
+
+.message-actions {
+    display: flex;
+
+    gap: 5px;
+
+    margin-top: 8px;
+
+    opacity: 0;
+
+    transition: opacity .2s;
+}
+
+.ai-row:hover .message-actions {
+    opacity: 1;
+}
+
+.message-action {
+    border: 0;
+
+    background: transparent;
+
+    color: var(--muted);
+
+    font-size: 12px;
+
+    padding: 4px 7px;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+}
+
+.message-action:hover {
+    background: var(--surface);
+    color: var(--text);
+}
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.loading {
+    color: var(--muted);
+
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+}
+
+.loading-dots {
+    display: inline-flex;
+    gap: 3px;
+}
+
+.loading-dots span {
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: var(--orange);
+
+    animation:
+        loadingDot 1.2s infinite;
+}
+
+.loading-dots span:nth-child(2) {
+    animation-delay: .15s;
+}
+
+.loading-dots span:nth-child(3) {
+    animation-delay: .3s;
+}
+
+@keyframes loadingDot {
+    0%,
+    60%,
+    100% {
+        opacity: .25;
+        transform: translateY(0);
+    }
+
+    30% {
+        opacity: 1;
+        transform: translateY(-3px);
+    }
+}
+
+/* =========================================================
+   INPUT AREA
+   ========================================================= */
+
+.input-area {
+    position: absolute;
+
+    left: 270px;
+    right: 0;
+    bottom: 0;
+
+    padding: 20px 20px 18px;
+
+    background:
+        linear-gradient(
+            to top,
+            var(--bg) 70%,
+            transparent
+        );
+
+    pointer-events: none;
+}
+
+.input-container {
+    width: 100%;
+    max-width: 820px;
+
+    margin: auto;
+
+    pointer-events: auto;
+}
+
+.input-wrapper {
+    width: 100%;
+
+    min-height: 58px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+
+    border-radius: 18px;
+
+    display: flex;
+    align-items: flex-end;
+
+    padding: 10px 10px 10px 16px;
+
+    box-shadow: var(--shadow);
+
+    transition:
+        border-color .2s,
+        box-shadow .2s;
+}
+
+.input-wrapper:focus-within {
+    border-color: #666;
+
+    box-shadow:
+        0 12px 35px rgba(0,0,0,.25);
+}
+
+textarea {
+    flex: 1;
+
+    width: 100%;
+
+    min-height: 34px;
+    max-height: 180px;
+
+    resize: none;
+
+    overflow-y: auto;
+
+    background: transparent;
+
+    border: 0;
+    outline: 0;
+
+    color: var(--text);
+
+    font-size: 15px;
+
+    line-height: 1.5;
+
+    padding: 7px 5px;
+}
+
+textarea::placeholder {
+    color: var(--muted);
+}
+
+/* BUTTONS */
+
+.button-group {
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding-left: 5px;
+}
+
+.action-btn {
+    width: 38px;
+    height: 38px;
+
+    flex-shrink: 0;
+
+    border: 0;
+
+    border-radius: 10px;
+
+    background: transparent;
+
+    color: var(--text);
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 17px;
+
+    transition: .2s;
+}
+
+.action-btn:hover {
+    background: var(--surface-hover);
+}
+
+.send-btn {
+    background: var(--text);
+
+    color: var(--bg);
+
+    font-size: 18px;
+
+    font-weight: 800;
+}
+
+.send-btn:hover {
+    transform: scale(1.04);
+
+    background: var(--text);
+}
+
+.mic-btn.listening {
+    background: var(--danger);
+
+    color: #fff;
+
+    animation:
+        micPulse 1.3s infinite;
+}
+
+@keyframes micPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(239,68,68,.5);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(239,68,68,0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(239,68,68,0);
+    }
+}
+
+.disclaimer {
+    text-align: center;
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+    margin-top: 8px;
+}
+
+/* =========================================================
+   MOBILE OVERLAY
+   ========================================================= */
+
+.sidebar-overlay {
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0,0,0,.5);
+
+    z-index: 20;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 760px) {
+
+    .sidebar {
+        position: fixed;
+
+        z-index: 30;
+
+        left: 0;
+        top: 0;
+        bottom: 0;
+
+        transform: translateX(-100%);
+
+        box-shadow:
+            10px 0 30px rgba(0,0,0,.25);
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .sidebar-overlay.active {
+        display: block;
+    }
+
+    .mobile-menu {
+        display: block;
+    }
+
+    .input-area {
+        left: 0;
+
+        padding:
+            12px
+            10px
+            calc(12px + env(safe-area-inset-bottom));
+    }
+
+    .chat-container {
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+
+    .message-row {
+        padding: 10px 5px;
+    }
+
+    .message-content {
+        gap: 9px;
+
+        font-size: 14px;
+    }
+
+    .avatar {
+        width: 30px;
+        height: 30px;
+
+        border-radius: 8px;
+    }
+
+    .user-row .text-wrapper {
+        max-width: 82%;
+    }
+
+    .model-badge {
+        display: none;
+    }
+
+    .topbar {
+        padding: 0 12px;
+    }
+
+    .chat-title {
+        font-size: 14px;
+    }
+
+    .input-wrapper {
+        border-radius: 16px;
+    }
+
+    .disclaimer {
+        font-size: 9px;
+    }
+}
+</style>
 </head>
+
 <body>
 
-    <div class="chat-card">
-        <div class="header">
+<div class="app">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-logo">
+                O
+            </div>
+
             <div>
-                <div class="header-title"><span>🤖</span> ASKGEMI AI</div>
-                <div class="status">● हमेशा ऑनलाइन • आपकी सहायता के लिए तैयार</div>
+                <div class="brand-name">
+                    OrangeChat
+                </div>
+
+                <div class="brand-sub">
+                    Your AI Assistant
+                </div>
             </div>
-            <div class="header-actions">
-                <!-- थीम बदलने का नया बटन -->
-                <button class="theme-btn" onclick="toggleTheme()" id="theme-btn" title="थीम बदलें">🌙</button>
-                <div class="badge">Vineet 1.0</div>
-            </div>
+
         </div>
 
-        <div id="chat-box" class="chat-box">
-            <div class="msg ai">
-                नमस्ते! मैं आपका नया सुपर स्टाइलिश असिस्टेंट हूँ। विनीत गुप्ता के बनाये AI में आपका स्वागत है 
-            </div>
+        <button
+            class="new-chat-btn"
+            id="new-chat-btn"
+        >
+            <span class="new-chat-icon">＋</span>
+
+            <span>
+                New chat
+            </span>
+        </button>
+
+        <div class="history-title">
+            Recent chats
         </div>
+
+        <div
+            class="history-list"
+            id="history-list"
+        >
+
+            <div class="history-item">
+                विनीत गुप्ता का AI प्रोजेक्ट
+            </div>
+
+            <div class="history-item">
+                कल की बातचीत...
+            </div>
+
+        </div>
+
+        <div class="sidebar-footer">
+
+            <span class="version-text">
+                OrangeChat v2.0
+            </span>
+
+            <button
+                class="theme-toggle"
+                id="theme-btn"
+                title="Theme बदलें"
+            >
+                🌙
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MOBILE OVERLAY -->
+
+    <div
+        class="sidebar-overlay"
+        id="sidebar-overlay"
+    ></div>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+            <div class="top-left">
+
+                <button
+                    class="mobile-menu"
+                    id="mobile-menu"
+                    aria-label="Menu"
+                >
+                    ☰
+                </button>
+
+                <div class="chat-title">
+                    OrangeChat AI
+                </div>
+
+            </div>
+
+            <div class="model-badge">
+                Gemini 3.6 Pro
+            </div>
+
+        </header>
+
+
+        <!-- CHAT -->
+
+        <section
+            id="chat-container"
+            class="chat-container"
+        >
+
+            <!-- INITIAL MESSAGE -->
+
+            <div class="message-row ai-row">
+
+                <div class="message-content">
+
+                    <div class="avatar ai">
+                        O
+                    </div>
+
+                    <div class="text-wrapper">
+
+                        नमस्ते! 👋
+
+                        मैं OrangeChat AI हूँ।
+                        आप मुझसे कोई भी सवाल पूछ सकते हैं।
+
+                        <div class="message-actions">
+
+                            <button
+                                class="message-action"
+                                onclick="copyText(this)"
+                            >
+                                📋 Copy
+                            </button>
+
+                            <button
+                                class="message-action"
+                                onclick="speakMessage(this)"
+                            >
+                                🔊 सुनें
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- INPUT -->
 
         <div class="input-area">
-            <input id="user-input" type="text" placeholder="अपना संदेश यहाँ टाइप करें..." onkeypress="if(event.key === 'Enter') sendMessage()">
-            <button id="mic-btn" class="mic-btn" onclick="toggleVoice()" title="Hindi/English में बोलें">🎙️</button>
-            <button class="send-btn" onclick="sendMessage()">भेजें</button>
+
+            <div class="input-container">
+
+                <div class="input-wrapper">
+
+                    <textarea
+                        id="user-input"
+                        rows="1"
+                        placeholder="Message OrangeChat..."
+                        autocomplete="off"
+                    ></textarea>
+
+                    <div class="button-group">
+
+                        <button
+                            id="mic-btn"
+                            class="action-btn mic-btn"
+                            title="बोलकर टाइप करें"
+                        >
+                            🎙️
+                        </button>
+
+                        <button
+                            id="send-btn"
+                            class="action-btn send-btn"
+                            title="संदेश भेजें"
+                        >
+                            ➤
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div class="disclaimer">
+                    OrangeChat AI can make mistakes. कृपया महत्वपूर्ण जानकारी verify करें।
+                </div>
+
+            </div>
+
         </div>
-    </div>
 
-    <script>
-        // थीम टॉगल लॉजिक
-        function toggleTheme() {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const themeBtn = document.getElementById('theme-btn');
-            
-            if (currentTheme === 'dark') {
-                document.documentElement.setAttribute('data-theme', 'light');
-                themeBtn.innerText = '🌙';
-            } else {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                themeBtn.innerText = '☀️';
-            }
-        }
+    </main>
 
-        // वॉइस रिकग्निशन (Mic) सेटअप
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        let recognition = null;
-        let isListening = false;
+</div>
 
-        if (SpeechRecognition) {
-            recognition = new SpeechRecognition();
-            recognition.continuous = false; 
-            recognition.interimResults = false; 
-            recognition.lang = 'hi-IN'; 
 
-            recognition.onstart = () => {
-                isListening = true;
-                const micBtn = document.getElementById('mic-btn');
-                micBtn.classList.add('listening');
-                micBtn.innerText = '🛑'; 
-            };
+<script>
 
-            recognition.onresult = (event) => {
-                const transcript = event.results.transcript;
-                document.getElementById('user-input').value = transcript;
-            };
+/* =========================================================
+   ELEMENTS
+   ========================================================= */
 
-            recognition.onerror = (event) => {
-                console.error("माइक त्रुटि: ", event.error);
-                stopListening();
-            };
+const themeBtn =
+    document.getElementById("theme-btn");
 
-            recognition.onend = () => {
-                stopListening();
-            };
+const userInput =
+    document.getElementById("user-input");
+
+const micBtn =
+    document.getElementById("mic-btn");
+
+const sendBtn =
+    document.getElementById("send-btn");
+
+const chatContainer =
+    document.getElementById("chat-container");
+
+const newChatBtn =
+    document.getElementById("new-chat-btn");
+
+const sidebar =
+    document.getElementById("sidebar");
+
+const mobileMenu =
+    document.getElementById("mobile-menu");
+
+const sidebarOverlay =
+    document.getElementById("sidebar-overlay");
+
+
+/* =========================================================
+   THEME
+   ========================================================= */
+
+themeBtn.addEventListener(
+    "click",
+    () => {
+
+        const doc =
+            document.documentElement;
+
+        const current =
+            doc.getAttribute("data-theme");
+
+        if (current === "dark") {
+
+            doc.setAttribute(
+                "data-theme",
+                "light"
+            );
+
+            themeBtn.textContent = "☀️";
+
+            localStorage.setItem(
+                "orangechat-theme",
+                "light"
+            );
+
         } else {
-            document.getElementById('mic-btn').style.display = 'none';
+
+            doc.setAttribute(
+                "data-theme",
+                "dark"
+            );
+
+            themeBtn.textContent = "🌙";
+
+            localStorage.setItem(
+                "orangechat-theme",
+                "dark"
+            );
+        }
+    }
+);
+
+
+/* Restore theme */
+
+const savedTheme =
+    localStorage.getItem(
+        "orangechat-theme"
+    );
+
+if (savedTheme) {
+
+    document.documentElement
+        .setAttribute(
+            "data-theme",
+            savedTheme
+        );
+
+    themeBtn.textContent =
+        savedTheme === "light"
+            ? "☀️"
+            : "🌙";
+}
+
+
+/* =========================================================
+   MOBILE SIDEBAR
+   ========================================================= */
+
+function openSidebar() {
+
+    sidebar.classList.add("open");
+
+    sidebarOverlay.classList.add("active");
+}
+
+function closeSidebar() {
+
+    sidebar.classList.remove("open");
+
+    sidebarOverlay.classList.remove("active");
+}
+
+mobileMenu.addEventListener(
+    "click",
+    openSidebar
+);
+
+sidebarOverlay.addEventListener(
+    "click",
+    closeSidebar
+);
+
+
+/* =========================================================
+   TEXTAREA AUTO RESIZE
+   ========================================================= */
+
+function resizeTextarea() {
+
+    userInput.style.height = "auto";
+
+    userInput.style.height =
+        Math.min(
+            userInput.scrollHeight,
+            180
+        ) + "px";
+}
+
+userInput.addEventListener(
+    "input",
+    resizeTextarea
+);
+
+
+/* =========================================================
+   ENTER SEND
+   ========================================================= */
+
+userInput.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Enter" &&
+            !event.shiftKey
+        ) {
+
+            event.preventDefault();
+
+            sendMessage();
+        }
+    }
+);
+
+
+/* =========================================================
+   SPEECH RECOGNITION
+   ========================================================= */
+
+const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+let recognition = null;
+
+let isListening = false;
+
+if (SpeechRecognition) {
+
+    recognition =
+        new SpeechRecognition();
+
+    recognition.continuous = false;
+
+    recognition.interimResults = false;
+
+    recognition.lang = "hi-IN";
+
+
+    recognition.onstart = () => {
+
+        isListening = true;
+
+        micBtn.classList.add(
+            "listening"
+        );
+
+        micBtn.textContent = "🛑";
+    };
+
+
+    recognition.onresult = event => {
+
+        const transcript =
+            event.results[0][0]
+                .transcript;
+
+        userInput.value =
+            transcript;
+
+        resizeTextarea();
+    };
+
+
+    recognition.onerror = event => {
+
+        console.error(
+            "Speech error:",
+            event.error
+        );
+
+        if (
+            event.error ===
+            "not-allowed"
+        ) {
+
+            alert(
+                "Microphone permission blocked है। Chrome/Edge में Microphone Allow करें।"
+            );
         }
 
-        function toggleVoice() {
-            if (!recognition) return;
-            window.speechSynthesis.cancel(); 
-            
-            if (isListening) {
-                recognition.stop();
-            } else {
-                recognition.start();
-            }
+        stopListening();
+    };
+
+
+    recognition.onend = () => {
+
+        stopListening();
+    };
+}
+
+
+micBtn.addEventListener(
+    "click",
+    () => {
+
+        if (!SpeechRecognition) {
+
+            alert(
+                "आपका browser voice typing support नहीं करता। Chrome या Edge इस्तेमाल करें।"
+            );
+
+            return;
         }
 
-        function stopListening() {
-            isListening = false;
-            const micBtn = document.getElementById('mic-btn');
-            micBtn.classList.remove('listening');
-            micBtn.innerText = '🎙️';
-        }
+        window.speechSynthesis.cancel();
 
-        // टेक्स्ट-टू-स्पीच (AI Voice Reply) फंक्शन
-        function speakText(text) {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel(); 
+        if (isListening) {
 
-                const utterance = new SpeechSynthesisUtterance(text);
-                const isEnglish = /^[A-Za-z0-9\s,.?!]+$/.test(text);
-                utterance.lang = isEnglish ? 'en-US' : 'hi-IN';
-                utterance.rate = 1.0;  
-                utterance.pitch = 1.0; 
-                
-                window.speechSynthesis.speak(utterance);
-            }
-        }
+            recognition.stop();
 
-        // संदेश भेजने का लॉजिक
-        async function sendMessage() {
-            const input = document.getElementById('user-input');
-            const chatBox = document.getElementById('chat-box');
-            const text = input.value.trim();
-            
-            if(!text) return;
-            input.value = '';
-
-            if(isListening) recognition.stop();
-            window.speechSynthesis.cancel(); 
-
-            const userMsg = document.createElement('div');
-            userMsg.className = 'msg user';
-            userMsg.textContent = text;
-            chatBox.appendChild(userMsg);
-            chatBox.scrollTop = chatBox.scrollHeight;
-
-            const loadingId = 'loading-' + Date.now();
-            const loadingEl = document.createElement('div');
-            loadingEl.className = 'msg ai loading';
-            loadingEl.id = loadingId;
-            loadingEl.textContent = 'एआई सोच रहा है...';
-            chatBox.appendChild(loadingEl);
-            chatBox.scrollTop = chatBox.scrollHeight;
+        } else {
 
             try {
-                const res = await fetch('/ask', {
-                    method: 'POST',
+
+                recognition.start();
+
+            } catch (error) {
+
+                console.error(error);
+
+            }
+
+        }
+    }
+);
+
+
+function stopListening() {
+
+    isListening = false;
+
+    micBtn.classList.remove(
+        "listening"
+    );
+
+    micBtn.textContent = "🎙️";
+}
+
+
+/* =========================================================
+   TEXT TO SPEECH
+   ========================================================= */
+
+function speakText(text) {
+
+    if (
+        !("speechSynthesis" in window)
+    ) {
+        return;
+    }
+
+    window.speechSynthesis.cancel();
+
+    const utterance =
+        new SpeechSynthesisUtterance(
+            text
+        );
+
+    utterance.lang =
+        /[\u0900-\u097F]/.test(text)
+            ? "hi-IN"
+            : "en-US";
+
+    utterance.rate = 1;
+
+    utterance.pitch = 1;
+
+    window.speechSynthesis.speak(
+        utterance
+    );
+}
+
+
+/* =========================================================
+   NEW CHAT
+   ========================================================= */
+
+newChatBtn.addEventListener(
+    "click",
+    clearChat
+);
+
+
+function clearChat() {
+
+    chatContainer.innerHTML = `
+
+        <div class="message-row ai-row">
+
+            <div class="message-content">
+
+                <div class="avatar ai">
+                    O
+                </div>
+
+                <div class="text-wrapper">
+
+                    नई चैट शुरू हो गई है। 👋
+
+                    मैं आपकी क्या मदद कर सकता हूँ?
+
+                    <div class="message-actions">
+
+                        <button
+                            class="message-action"
+                            onclick="copyText(this)"
+                        >
+                            📋 Copy
+                        </button>
+
+                        <button
+                            class="message-action"
+                            onclick="speakMessage(this)"
+                        >
+                            🔊 सुनें
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+    closeSidebar();
+}
+
+
+/* =========================================================
+   SEND MESSAGE
+   ========================================================= */
+
+async function sendMessage() {
+
+    const text =
+        userInput.value.trim();
+
+    if (!text) {
+        return;
+    }
+
+
+    /* Clear input */
+
+    userInput.value = "";
+
+    resizeTextarea();
+
+
+    /* Stop microphone */
+
+    if (isListening && recognition) {
+
+        recognition.stop();
+    }
+
+
+    /* Stop current speech */
+
+    window.speechSynthesis.cancel();
+
+
+    /* Add user message */
+
+    chatContainer.insertAdjacentHTML(
+        "beforeend",
+        createUserMessage(text)
+    );
+
+
+    scrollToBottom();
+
+
+    /* Loading */
+
+    const loadingId =
+        "loading-" +
+        Date.now();
+
+    chatContainer.insertAdjacentHTML(
+        "beforeend",
+        `
+
+        <div
+            id="${loadingId}"
+            class="message-row ai-row"
+        >
+
+            <div class="message-content">
+
+                <div class="avatar ai">
+                    O
+                </div>
+
+                <div class="text-wrapper loading">
+
+                    OrangeChat सोच रहा है
+
+                    <span class="loading-dots">
+
+                        <span></span>
+                        <span></span>
+                        <span></span>
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        `
+    );
+
+    scrollToBottom();
+
+
+    /* =====================================================
+       EXISTING BACKEND
+       ===================================================== */
+
+    try {
+
+        const response =
+            await fetch(
+                "/ask",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+                            message: text
+                        })
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Server error: " +
+                response.status
+            );
+        }
+
+
+        const data =
+            await response.json();
+
+
+        /* Remove loading */
+
+        const loadingElement =
+            document.getElementById(
+                loadingId
+            );
+
+        if (loadingElement) {
+
+            loadingElement.remove();
+        }
+
+
+        /* AI reply */
+
+        const reply =
+            data.reply ||
+            "AI से कोई जवाब नहीं मिला।";
+
+
+        chatContainer.insertAdjacentHTML(
+            "beforeend",
+            createAIMessage(reply)
+        );
+
+
+        scrollToBottom();
+
+
+        /* Speak */
+
+        speakText(reply);
+
+
+    } catch (error) {
+
+        console.error(
+            "OrangeChat API Error:",
+            error
+        );
+
+
+        const loadingElement =
+            document.getElementById(
+                loadingId
+            );
+
+        if (loadingElement) {
+
+            loadingElement.remove();
+        }
+
+
+        chatContainer.insertAdjacentHTML(
+            "beforeend",
+            `
+
+            <div class="message-row ai-row">
+
+                <div class="message-content">
+
+                    <div
+                        class="avatar"
+                        style="background:#ef4444;color:white;"
+                    >
+                        !
+                    </div>
+
+                    <div
+                        class="text-wrapper"
+                        style="color:#ef4444;"
+                    >
+
+                        OrangeChat server से
+                        connection नहीं हो पाया।
+
+                        <div class="message-actions">
+
+                            <button
+                                class="message-action"
+                                onclick="sendMessage()"
+                            >
+                                🔄 Retry
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            `
+        );
+
+        scrollToBottom();
+    }
+}
+
+
+/* =========================================================
+   USER MESSAGE HTML
+   ========================================================= */
+
+function createUserMessage(text) {
+
+    return `
+
+        <div class="message-row user-row">
+
+            <div class="message-content">
+
+                <div class="avatar user">
+                    U
+                </div>
+
+                <div class="text-wrapper">
+
+                    ${escapeHTML(text)}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+}
+
+
+/* =========================================================
+   AI MESSAGE HTML
+   ========================================================= */
+
+function createAIMessage(text) {
+
+    return `
+
+        <div class="message-row ai-row">
+
+            <div class="message-content">
+
+                <div class="avatar ai">
+                    O
+                </div>
+
+                <div class="text-wrapper">
+
+                    ${escapeHTML(text)}
+
+                    <div class="message-actions">
+
+                        <button
+                            class="message-action"
+                            onclick="copyText(this)"
+                        >
+                            📋 Copy
+                        </button>
+
+                        <button
+                            class="message-action"
+                            onclick="speakMessage(this)"
+                        >
+                            🔊 सुनें
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+}
+
+
+/* =========================================================
+   COPY MESSAGE
+   ========================================================= */
+
+function copyText(button) {
+
+    const wrapper =
+        button.closest(
+            ".text-wrapper"
+        );
+
+    if (!wrapper) {
+        return;
+    }
+
+    const clone =
+        wrapper.cloneNode(true);
+
+    const actions =
+        clone.querySelector(
+            ".message-actions"
+        );
+
+    if (actions) {
+        actions.remove();
+    }
+
+    const text =
+        clone.innerText.trim();
+
+    navigator.clipboard
+        .writeText(text)
+        .then(() => {
+
+            const oldText =
+                button.innerText;
+
+            button.innerText =
+                "✓ Copied";
+
+            setTimeout(() => {
+
+                button.innerText =
+                    oldText;
+
+            }, 1500);
+
+        })
+        .catch(() => {
+
+            alert(
+                "Copy नहीं हो पाया।"
+            );
+        });
+}
+
+
+/* =========================================================
+   SPEAK PARTICULAR MESSAGE
+   ========================================================= */
+
+function speakMessage(button) {
+
+    const wrapper =
+        button.closest(
+            ".text-wrapper"
+        );
+
+    if (!wrapper) {
+        return;
+    }
+
+    const clone =
+        wrapper.cloneNode(true);
+
+    const actions =
+        clone.querySelector(
+            ".message-actions"
+        );
+
+    if (actions) {
+        actions.remove();
+    }
+
+    speakText(
+        clone.innerText.trim()
+    );
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+   ========================================================= */
+
+function escapeHTML(str) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.textContent = str;
+
+    return div.innerHTML;
+}
+
+
+/* =========================================================
+   SCROLL
+   ========================================================= */
+
+function scrollToBottom() {
+
+    requestAnimationFrame(() => {
+
+        chatContainer.scrollTop =
+            chatContainer.scrollHeight;
+
+    });
+}
+
+
+/* =========================================================
+   CLOSE MOBILE SIDEBAR AFTER HISTORY CLICK
+   ========================================================= */
+
+document
+    .querySelectorAll(".history-item")
+    .forEach(item => {
+
+        item.addEventListener(
+            "click",
+            closeSidebar
+        );
+
+    });
+
+</script>
+
+</body>
+</html>
