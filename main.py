@@ -3,15 +3,19 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-import google.generativeai as genai
+from openai import OpenAI  # Grok के लिए OpenAI लाइब्रेरी का उपयोग
 
 app = FastAPI()
 
-# API Key सेटअप
-API_KEY = os.getenv("GEMINI_API_KEY", "YOUR_FALLBACK_KEY")
-genai.configure(api_key=API_KEY)
+# Render से Grok API Key उठाना
+XAI_API_KEY = os.getenv("XAI_API_KEY", "YOUR_FALLBACK_KEY")
 
-# HTML फाइल दिखाने के लिए सेटअप
+# Grok API को कनेक्ट करने के लिए स्पेशल क्लाइंट सेटअप
+client = OpenAI(
+    api_key=XAI_API_KEY,
+    base_url="https://x.ai"  # Grok का आधिकारिक सर्वर रूट
+)
+
 templates = Jinja2Templates(directory="templates")
 
 @app.get("/", response_class=HTMLResponse)
@@ -26,9 +30,14 @@ async def head_item():
 async def ask_ai(data: dict):
     user_message = data.get("message", "")
     try:
-        # यहाँ सबसे नया और आधिकारिक gemini-3.6-flash मॉडल सेट कर दिया गया है
-        model = genai.GenerativeModel("gemini-3.6-flash")
-        response = model.generate_content(user_message)
-        return {"reply": response.text}
+        # यहाँ Grok का सबसे लेटेस्ट और तेज़ मॉडल इस्तेमाल किया गया है
+        response = client.chat.completions.create(
+            model="grok-2-1212",
+            messages=[
+                {"role": "system", "content": "आप एक बहुत ही बुद्धिमान और मजाकिया AI सहायक हैं जिसका नाम Grok है।"},
+                {"role": "user", "content": user_message}
+            ]
+        )
+        return {"reply": response.choices[0].message.content}
     except Exception as e:
         return {"reply": f"Error: {str(e)}"}
