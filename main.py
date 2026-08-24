@@ -23,7 +23,7 @@ async def read_item(request: Request):
 async def ask_ai(data: dict):
     user_message = data.get("message", "")
     try:
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        model = genai.GenerativeModel("gemini-1.5-flash-latest")
         response = model.generate_content(user_message)
         return {"reply": response.text}
     except Exception as e:
