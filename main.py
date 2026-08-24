@@ -7,7 +7,7 @@ import google.generativeai as genai
 
 app = FastAPI()
 
-# API Key सेटअप (इसे हम होस्टिंग पैनल में सुरक्षित रखेंगे)
+# API Key सेटअप
 API_KEY = os.getenv("GEMINI_API_KEY", "YOUR_FALLBACK_KEY")
 genai.configure(api_key=API_KEY)
 
@@ -18,6 +18,10 @@ templates = Jinja2Templates(directory="templates")
 async def read_item(request: Request):
     return templates.TemplateResponse(request, "index.html")
 
+# HEAD एरर को ठीक करने के लिए नया रूट
+@app.head("/")
+async def head_item():
+    return HTMLResponse(content="", status_code=200)
 
 @app.post("/ask")
 async def ask_ai(data: dict):
