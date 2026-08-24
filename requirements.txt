@@ -1,6 +1,5 @@
 fastapi
 uvicorn
 jinja2
-google-generativeai
 python-multipart
-Pillow
+google-genai
