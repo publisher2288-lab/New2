@@ -1880,8 +1880,35 @@ input.addEventListener(
    ENTER
 ========================================================= */
 
+/* =========================================================
+   ENTER / SEND
+   Enter = Send
+   Shift + Enter = New line
+========================================================= */
+
 input.addEventListener(
     "keydown",
+    event => {
+
+        if (
+            event.key === "Enter" &&
+            !event.shiftKey &&
+            !event.isComposing
+        ) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            sendMessage();
+
+        }
+
+    }
+);
+
+/* Prevent Enter from behaving like a browser/form command */
+input.addEventListener(
+    "keypress",
     event => {
 
         if (
@@ -1891,9 +1918,20 @@ input.addEventListener(
 
             event.preventDefault();
 
-            sendMessage();
-
         }
+
+    }
+);
+
+/* Actual UI Send button */
+sendButton.addEventListener(
+    "click",
+    event => {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        sendMessage();
 
     }
 );
