@@ -4,71 +4,100 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OrangeChat - मेरा Premium AI</title>
-    <!-- बिना ब्लॉक होने वाला सबसे सुरक्षित Tailwind CSS CDN लिंक -->
-    <script src="https://jsdelivr.net"></script>
+    <!-- 100% लोड होने वाला सुरक्षित Bootstrap CSS लिंक -->
+    <link rel="stylesheet" href="https://jsdelivr.net">
     <style>
-        .custom-gradient {
-            background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%);
+        body {
+            background-color: #f8f9fa;
         }
-        .orange-shadow {
-            box-shadow: 0 10px 25px -5px rgba(255, 126, 95, 0.3);
+        .orange-header {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 15px 15px 0 0;
         }
-        /* स्क्रॉलबार को सुंदर बनाने के लिए */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #ff7e5f; border-radius: 10px; }
+        .chat-container {
+            max-width: 500px;
+            margin: 30px auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 1px solid #ffe8db;
+        }
+        .chat-box {
+            height: 450px;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: #fffaf7;
+        }
+        .msg-ai {
+            background-color: #ffffff;
+            border: 1px solid #ffd0b5;
+            color: #333;
+            border-radius: 15px 15px 15px 0;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            max-width: 85%;
+            font-size: 14px;
+        }
+        .msg-user {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+            color: white;
+            border-radius: 15px 15px 0 15px;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            max-width: 85%;
+            margin-left: auto;
+            font-size: 14px;
+        }
+        .input-area {
+            padding: 15px;
+            background: white;
+            border-top: 1px solid #ffe8db;
+            border-radius: 0 0 15px 15px;
+        }
+        .btn-orange {
+            background-color: #ff6b35;
+            color: white;
+            border: none;
+        }
+        .btn-orange:hover {
+            background-color: #e55a2b;
+            color: white;
+        }
     </style>
 </head>
-<body class="bg-gray-50 flex items-center justify-center min-h-screen font-sans p-2 sm:p-4">
+<body>
 
-    <!-- मुख्य चैट कंटेनर -->
-    <div class="w-full max-w-lg bg-white rounded-2xl shadow-xl flex flex-col h-[85vh] sm:h-[80vh] overflow-hidden border border-orange-100">
-        
-        <!-- प्रीमियम ऑरेंज हेडर -->
-        <header class="custom-gradient px-6 py-4 flex items-center justify-between text-white shadow-md">
-            <div class="flex items-center gap-3">
-                <div class="bg-white/20 p-2 rounded-xl backdrop-blur-md">
-                    <span class="text-2xl">🤖</span>
-                </div>
+    <div class="chat-container">
+        <!-- ऑरेंज प्रीमियम हेडर -->
+        <div class="orange-header d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <span class="fs-3 me-2">🤖</span>
                 <div>
-                    <h1 class="font-bold text-lg tracking-wide">OrangeChat AI</h1>
-                    <p class="text-xs text-orange-100 flex items-center gap-1">
-                        <span class="w-2 h-2 rounded-full bg-green-400 inline-block animate-pulse"></span> ऑनलाइन सहायक
-                    </p>
+                    <h5 class="m-0 font-weight-bold">OrangeChat AI</h5>
+                    <small style="color: #ffe0d1;">● ऑनलाइन सहायक</small>
                 </div>
             </div>
-            <div class="text-xs bg-white/20 px-3 py-1 rounded-full font-semibold border border-white/20">
-                Gemini 3.6
-            </div>
-        </header>
+            <span class="badge bg-light text-dark">Gemini 3.6</span>
+        </div>
 
         <!-- चैट मैसेजेस एरिया -->
-        <div id="chat-box" class="flex-1 p-6 overflow-y-auto space-y-4 bg-orange-50/30">
-            <!-- शुरुआती स्वागत मैसेज -->
-            <div class="flex gap-2 items-end max-w-[85%]">
-                <div class="w-8 h-8 rounded-full custom-gradient flex items-center justify-center text-sm shadow-sm flex-shrink-0 text-white font-bold">AI</div>
-                <div class="bg-white text-gray-800 p-3.5 rounded-2xl rounded-bl-none shadow-sm border border-orange-100 text-sm leading-relaxed">
-                    नमस्ते! मैं आपका नया सुपर स्टाइलिश और मॉडर्न एआई असिस्टेंट हूँ। आपको यह नया **ऑरेंज और व्हाइट** लुक कैसा लगा? मुझसे कुछ भी पूछें!
-                </div>
+        <div id="chat-box" class="chat-box">
+            <div class="d-flex align-items-start msg-ai">
+                नमस्ते! मैं आपका नया सुपर स्टाइलिश असिस्टेंट हूँ। आपको यह नया ऑरेंज और व्हाइट थीम लुक कैसा लगा? मुझसे कुछ भी पूछें!
             </div>
         </div>
 
         <!-- इनपुट और बटन एरिया -->
-        <div class="p-4 bg-white border-t border-orange-100">
-            <div class="flex items-center gap-2 bg-gray-50 p-2 rounded-xl border border-gray-200 focus-within:border-orange-400 focus-within:ring-2 focus-within:ring-orange-100 transition-all">
-                <input id="user-input" type="text" placeholder="अपना संदेश यहाँ टाइप करें..." 
-                       class="flex-1 p-2 bg-transparent text-gray-800 focus:outline-none text-sm"
-                       onkeypress="if(event.key === 'Enter') sendMessage()">
-                
-                <button onclick="sendMessage()" class="custom-gradient hover:opacity-90 active:scale-95 text-white px-5 py-2.5 rounded-lg font-bold text-sm transition-all shadow-md flex items-center gap-1 cursor-pointer">
-                    <span>भेजें</span> ➔
-                </button>
+        <div class="input-area">
+            <div class="input-group">
+                <input id="user-input" type="text" placeholder="अपना संदेश यहाँ टाइप करें..." class="form-control" onkeypress="if(event.key === 'Enter') sendMessage()">
+                <button onclick="sendMessage()" class="btn btn-orange px-4">भेजें ➔</button>
             </div>
         </div>
-
     </div>
 
-    <!-- वीडियो बैकएंड लॉजिक स्क्रिप्ट -->
     <script>
         async function sendMessage() {
             const input = document.getElementById('user-input');
@@ -78,32 +107,25 @@
             const text = input.value;
             input.value = '';
 
-            // 1. यूजर का मैसेज स्क्रीन पर स्टाइल के साथ जोड़ना
+            // 1. यूजर का मैसेज स्क्रीन पर जोड़ना
             chatBox.innerHTML += `
-                <div class="flex gap-2 items-end justify-end max-w-[85%] ml-auto">
-                    <div class="custom-gradient text-white p-3.5 rounded-2xl rounded-br-none shadow-sm text-sm leading-relaxed">
-                        ${text}
-                    </div>
+                <div class="msg-user text-start">
+                    ${text}
                 </div>
             `;
-            
-            // नीचे स्क्रॉल करना
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // लोडिंग इंडिकेटर दिखाना
+            // लोडिंग दिखाना
             const loadingId = 'loading-' + Date.now();
             chatBox.innerHTML += `
-                <div id="${loadingId}" class="flex gap-2 items-end max-w-[85%]">
-                    <div class="w-8 h-8 rounded-full custom-gradient flex items-center justify-center text-sm text-white font-bold">AI</div>
-                    <div class="bg-white text-gray-400 p-3.5 rounded-2xl rounded-bl-none shadow-sm border border-orange-100 text-sm">
-                        <span class="animate-pulse">एआई सोच रहा है...</span>
-                    </div>
+                <div id="${loadingId}" class="msg-ai text-muted">
+                    <em>एआई सोच रहा है...</em>
                 </div>
             `;
             chatBox.scrollTop = chatBox.scrollHeight;
 
             try {
-                // 2. बैकएंड सर्वर से बात करना
+                // 2. बैकएंड से बात करना
                 const res = await fetch('/ask', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
@@ -114,27 +136,20 @@
                 // लोडिंग हटाना
                 document.getElementById(loadingId).remove();
 
-                // 3. AI का जवाब स्क्रीन पर प्रीमियम स्टाइल में जोड़ना
+                // 3. AI का जवाब स्क्रीन पर जोड़ना
                 chatBox.innerHTML += `
-                    <div class="flex gap-2 items-end max-w-[85%]">
-                        <div class="w-8 h-8 rounded-full custom-gradient flex items-center justify-center text-sm text-white font-bold">AI</div>
-                        <div class="bg-white text-gray-800 p-3.5 rounded-2xl rounded-bl-none shadow-sm border border-orange-100 text-sm leading-relaxed">
-                            ${data.reply}
-                        </div>
+                    <div class="msg-ai text-start">
+                        ${data.reply}
                     </div>
                 `;
             } catch (error) {
                 document.getElementById(loadingId).remove();
                 chatBox.innerHTML += `
-                    <div class="flex gap-2 items-end max-w-[85%]">
-                        <div class="w-8 h-8 rounded-full bg-red-500 flex items-center justify-center text-sm text-white font-bold">!</div>
-                        <div class="bg-red-50 text-red-600 p-3.5 rounded-2xl rounded-bl-none shadow-sm border border-red-100 text-sm">
-                            कनेक्शन में त्रुटि आई। कृपया पुनः प्रयास करें।
-                        </div>
+                    <div class="msg-ai text-danger">
+                        त्रुटि: सर्वर से कनेक्ट नहीं हो पाया।
                     </div>
                 `;
             }
-            
             chatBox.scrollTop = chatBox.scrollHeight;
         }
     </script>
