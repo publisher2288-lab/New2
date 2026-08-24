@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>मेरा खुद का AI</title>
-    <!-- CSS लोड करने के लिए नया लिंक -->
-    <link rel="stylesheet" href="https://cloudflare.com">
+    <!-- यह नया और 100% काम करने वाला Tailwind CSS का आधिकारिक स्क्रिप्ट लिंक है -->
+    <script src="https://tailwindcss.com"></script>
 </head>
 <body class="bg-gray-950 text-white flex flex-col h-screen font-sans">
     <header class="bg-gray-900 p-4 text-center text-xl font-bold border-b border-gray-800 tracking-wide text-blue-400">🤖 मेरा डोमेन, मेरा AI</header>
@@ -20,17 +20,22 @@
             const chatBox = document.getElementById('chat-box');
             if(!input.value.trim()) return;
             
-            chatBox.innerHTML += `<div class="text-right"><span class="bg-blue-600 px-4 py-2 rounded-lg inline-block max-w-xs shadow-md">${input.value}</span></div>`;
+            // यूजर का मैसेज स्क्रीन पर जोड़ना
+            chatBox.innerHTML += `<div class="text-right"><span class="bg-blue-600 text-white px-4 py-2 rounded-lg inline-block max-w-xs shadow-md">${input.value}</span></div>`;
             const text = input.value;
             input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
 
+            // बैकएंड से बात करना
             const res = await fetch('/ask', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({message: text})
             });
             const data = await res.json();
-            chatBox.innerHTML += `<div class="text-left"><span class="bg-gray-800 border border-gray-700 px-4 py-2 rounded-lg inline-block max-w-xs shadow-md text-gray-200">${data.reply}</span></div>`;
+            
+            // AI का जवाब स्क्रीन पर जोड़ना
+            chatBox.innerHTML += `<div class="text-left"><span class="bg-gray-800 border border-gray-700 text-gray-100 px-4 py-2 rounded-lg inline-block max-w-xs shadow-md">${data.reply}</span></div>`;
             chatBox.scrollTop = chatBox.scrollHeight;
         }
     </script>
