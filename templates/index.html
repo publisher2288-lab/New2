@@ -3,112 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Orange & White UI</title>
-    <!-- Tailwind CSS for sleek styling -->
+    <title>OrangeChat - मेरा Premium AI</title>
+    <!-- बिना ब्लॉक होने वाला सबसे सुरक्षित Tailwind CSS CDN लिंक -->
     <script src="https://jsdelivr.net"></script>
-    <!-- Lucide Icons for clean visuals -->
-    <script src="https://unpkg.com"></script>
     <style>
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .custom-gradient {
+            background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%);
         }
-        .animate-fade-in {
-            animation: fadeIn 0.4s ease-out forwards;
+        .orange-shadow {
+            box-shadow: 0 10px 25px -5px rgba(255, 126, 95, 0.3);
         }
+        /* स्क्रॉलबार को सुंदर बनाने के लिए */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #ff7e5f; border-radius: 10px; }
     </style>
 </head>
-<body class="bg-orange-50/50 flex h-screen items-center justify-center font-sans antialiased">
+<body class="bg-gray-50 flex items-center justify-center min-h-screen font-sans p-2 sm:p-4">
 
-    <!-- Main Container with Smooth Rounded Corners -->
-    <div class="w-full max-w-4xl h-[85vh] bg-white rounded-3xl shadow-2xl border border-orange-100 flex overflow-hidden m-4 transition-all duration-300 hover:shadow-orange-100/50">
+    <!-- मुख्य चैट कंटेनर -->
+    <div class="w-full max-w-lg bg-white rounded-2xl shadow-xl flex flex-col h-[85vh] sm:h-[80vh] overflow-hidden border border-orange-100">
         
-        <!-- Sidebar (Orange Gradient) -->
-        <div class="w-1/3 bg-gradient-to-b from-orange-500 to-amber-600 p-6 flex flex-col justify-between text-white hidden md:flex">
-            <div>
-                <div class="flex items-center gap-3 mb-8">
-                    <div class="bg-white/20 p-2.5 rounded-2xl backdrop-blur-md">
-                        <i data-lucide="message-square" class="w-6 h-6 text-white"></i>
-                    </div>
-                    <span class="text-xl font-bold tracking-wide">OrangeChat</span>
-                </div>
-                
-                <nav class="space-y-2">
-                    <a href="#" class="flex items-center gap-3 bg-white/15 px-4 py-3 rounded-2xl font-medium transition-all hover:bg-white/20">
-                        <i data-lucide="layout-dashboard" class="w-5 h-5"></i> मुख्य डैशबोर्ड
-                    </a>
-                    <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-2xl opacity-80 hover:opacity-100 hover:bg-white/5 transition-all">
-                        <i data-lucide="settings" class="w-5 h-5"></i> सेटिंग्स
-                    </a>
-                </nav>
-            </div>
-            
-            <div class="flex items-center gap-3 border-t border-white/10 pt-4">
-                <div class="w-10 h-10 rounded-full bg-white text-orange-600 flex items-center justify-center font-bold text-lg shadow-md">
-                    U
+        <!-- प्रीमियम ऑरेंज हेडर -->
+        <header class="custom-gradient px-6 py-4 flex items-center justify-between text-white shadow-md">
+            <div class="flex items-center gap-3">
+                <div class="bg-white/20 p-2 rounded-xl backdrop-blur-md">
+                    <span class="text-2xl">🤖</span>
                 </div>
                 <div>
-                    <p class="font-semibold text-sm">यूजर प्रोफाइल</p>
-                    <p class="text-xs text-orange-200">ऑनलाइन</p>
+                    <h1 class="font-bold text-lg tracking-wide">OrangeChat AI</h1>
+                    <p class="text-xs text-orange-100 flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-green-400 inline-block animate-pulse"></span> ऑनलाइन सहायक
+                    </p>
+                </div>
+            </div>
+            <div class="text-xs bg-white/20 px-3 py-1 rounded-full font-semibold border border-white/20">
+                Gemini 3.6
+            </div>
+        </header>
+
+        <!-- चैट मैसेजेस एरिया -->
+        <div id="chat-box" class="flex-1 p-6 overflow-y-auto space-y-4 bg-orange-50/30">
+            <!-- शुरुआती स्वागत मैसेज -->
+            <div class="flex gap-2 items-end max-w-[85%]">
+                <div class="w-8 h-8 rounded-full custom-gradient flex items-center justify-center text-sm shadow-sm flex-shrink-0 text-white font-bold">AI</div>
+                <div class="bg-white text-gray-800 p-3.5 rounded-2xl rounded-bl-none shadow-sm border border-orange-100 text-sm leading-relaxed">
+                    नमस्ते! मैं आपका नया सुपर स्टाइलिश और मॉडर्न एआई असिस्टेंट हूँ। आपको यह नया **ऑरेंज और व्हाइट** लुक कैसा लगा? मुझसे कुछ भी पूछें!
                 </div>
             </div>
         </div>
 
-        <!-- Chat / Main Content Area (White Theme) -->
-        <div class="flex-1 flex flex-col h-full bg-white">
-            
-            <!-- Top Header -->
-            <div class="px-6 py-4 border-b border-orange-100 flex items-center justify-between bg-white">
-                <div class="flex items-center gap-3">
-                    <div class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></div>
-                    <h2 class="text-lg font-bold text-gray-800">एआई असिस्टेंट</h2>
-                </div>
-                <button class="p-2 text-gray-400 hover:text-orange-500 rounded-xl hover:bg-orange-50 transition-all">
-                    <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
+        <!-- इनपुट और बटन एरिया -->
+        <div class="p-4 bg-white border-t border-orange-100">
+            <div class="flex items-center gap-2 bg-gray-50 p-2 rounded-xl border border-gray-200 focus-within:border-orange-400 focus-within:ring-2 focus-within:ring-orange-100 transition-all">
+                <input id="user-input" type="text" placeholder="अपना संदेश यहाँ टाइप करें..." 
+                       class="flex-1 p-2 bg-transparent text-gray-800 focus:outline-none text-sm"
+                       onkeypress="if(event.key === 'Enter') sendMessage()">
+                
+                <button onclick="sendMessage()" class="custom-gradient hover:opacity-90 active:scale-95 text-white px-5 py-2.5 rounded-lg font-bold text-sm transition-all shadow-md flex items-center gap-1 cursor-pointer">
+                    <span>भेजें</span> ➔
                 </button>
             </div>
-
-            <!-- Messages Area (Scrollable) -->
-            <div class="flex-1 overflow-y-auto p-6 space-y-4 bg-gradient-to-b from-transparent to-orange-50/20">
-                
-                <!-- Incoming Message (AI) -->
-                <div class="flex items-start gap-3 max-w-[80%] animate-fade-in">
-                    <div class="w-8 h-8 rounded-xl bg-orange-500 flex items-center justify-center text-white shrink-0 shadow-md shadow-orange-500/20">
-                        <i data-lucide="bot" class="w-4 h-4"></i>
-                    </div>
-                    <div class="bg-orange-50 text-gray-800 p-4 rounded-2xl rounded-tl-sm shadow-sm border border-orange-100/50">
-                        <p class="text-sm leading-relaxed">नमस्ते! मैं आपका नया सुपर स्टाइलिश असिस्टेंट हूँ। आपको यह ऑरेंज और व्हाइट थीम कैसी लगी?</p>
-                    </div>
-                </div>
-
-                <!-- Outgoing Message (User) -->
-                <div class="flex items-start gap-3 max-w-[80%] ml-auto flex-row-reverse animate-fade-in">
-                    <div class="w-8 h-8 rounded-xl bg-gray-800 flex items-center justify-center text-white shrink-0 shadow-md">
-                        <i data-lucide="user" class="w-4 h-4"></i>
-                    </div>
-                    <div class="bg-gradient-to-r from-orange-500 to-amber-500 text-white p-4 rounded-2xl rounded-tr-sm shadow-md shadow-orange-500/10">
-                        <p class="text-sm leading-relaxed">यह दिखने में बहुत ही शानदार और प्रीमियम लग रहा है भाई!</p>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Input Action Bar -->
-            <div class="p-4 bg-white border-t border-orange-100">
-                <div class="flex items-center gap-2 bg-orange-50/50 p-2 rounded-2xl border border-orange-100 focus-within:border-orange-400 focus-within:ring-2 focus-within:ring-orange-100 transition-all">
-                    <input type="text" placeholder="अपना संदेश यहाँ टाइप करें..." class="flex-1 bg-transparent px-3 py-2 text-sm text-gray-800 outline-none placeholder-gray-400">
-                    <button class="bg-orange-500 hover:bg-orange-600 text-white p-2.5 rounded-xl shadow-md shadow-orange-500/20 transition-all active:scale-95 flex items-center justify-center">
-                        <i data-lucide="send" class="w-4 h-4"></i>
-                    </button>
-                </div>
-            </div>
-
         </div>
+
     </div>
 
-    <!-- Initialize Lucide Icons -->
+    <!-- वीडियो बैकएंड लॉजिक स्क्रिप्ट -->
     <script>
-        lucide.createIcons();
+        async function sendMessage() {
+            const input = document.getElementById('user-input');
+            const chatBox = document.getElementById('chat-box');
+            if(!input.value.trim()) return;
+            
+            const text = input.value;
+            input.value = '';
+
+            // 1. यूजर का मैसेज स्क्रीन पर स्टाइल के साथ जोड़ना
+            chatBox.innerHTML += `
+                <div class="flex gap-2 items-end justify-end max-w-[85%] ml-auto">
+                    <div class="custom-gradient text-white p-3.5 rounded-2xl rounded-br-none shadow-sm text-sm leading-relaxed">
+                        ${text}
+                    </div>
+                </div>
+            `;
+            
+            // नीचे स्क्रॉल करना
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // लोडिंग इंडिकेटर दिखाना
+            const loadingId = 'loading-' + Date.now();
+            chatBox.innerHTML += `
+                <div id="${loadingId}" class="flex gap-2 items-end max-w-[85%]">
+                    <div class="w-8 h-8 rounded-full custom-gradient flex items-center justify-center text-sm text-white font-bold">AI</div>
+                    <div class="bg-white text-gray-400 p-3.5 rounded-2xl rounded-bl-none shadow-sm border border-orange-100 text-sm">
+                        <span class="animate-pulse">एआई सोच रहा है...</span>
+                    </div>
+                </div>
+            `;
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            try {
+                // 2. बैकएंड सर्वर से बात करना
+                const res = await fetch('/ask', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({message: text})
+                });
+                const data = await res.json();
+                
+                // लोडिंग हटाना
+                document.getElementById(loadingId).remove();
+
+                // 3. AI का जवाब स्क्रीन पर प्रीमियम स्टाइल में जोड़ना
+                chatBox.innerHTML += `
+                    <div class="flex gap-2 items-end max-w-[85%]">
+                        <div class="w-8 h-8 rounded-full custom-gradient flex items-center justify-center text-sm text-white font-bold">AI</div>
+                        <div class="bg-white text-gray-800 p-3.5 rounded-2xl rounded-bl-none shadow-sm border border-orange-100 text-sm leading-relaxed">
+                            ${data.reply}
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                document.getElementById(loadingId).remove();
+                chatBox.innerHTML += `
+                    <div class="flex gap-2 items-end max-w-[85%]">
+                        <div class="w-8 h-8 rounded-full bg-red-500 flex items-center justify-center text-sm text-white font-bold">!</div>
+                        <div class="bg-red-50 text-red-600 p-3.5 rounded-2xl rounded-bl-none shadow-sm border border-red-100 text-sm">
+                            कनेक्शन में त्रुटि आई। कृपया पुनः प्रयास करें।
+                        </div>
+                    </div>
+                `;
+            }
+            
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
     </script>
 </body>
 </html>
