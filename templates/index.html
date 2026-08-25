@@ -1,5 +1,37 @@
 <!DOCTYPE html>
-<html lang="hi" data-theme="dark">
+<html lang="hi" data-theme="dark">/* AI messages - center */
+.ai-message {
+    justify-content: center;
+}
+
+/* USER messages - right aligned + compact bubble */
+.user-message {
+    justify-content: flex-end;
+    padding-right: max(12px, calc((100% - 768px) / 2));
+}
+
+.user-message .message-inner {
+    width: fit-content;
+    max-width: min(80%, 560px);
+    justify-content: flex-end;
+    align-items: flex-start;   /* ← yeh important hai */
+}
+
+.user-message .avatar {
+    order: 2;
+    margin-top: 2px;
+}
+
+.user-message .message-text {
+    flex: none !important;          /* ← stretch rokne ke liye */
+    width: fit-content;
+    max-width: 100%;
+    background: var(--user);
+    padding: 10px 14px;
+    border-radius: 18px 18px 4px 18px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+    line-height: 1.5;
+}
 <head>
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-T36HFJRKBH"></script>
@@ -351,6 +383,7 @@ body {
 /* USER messages - right aligned (no big empty box) */
 .user-message {
     justify-content: flex-end;
+    align-items: flex-start;
     padding-right: max(12px, calc((100% - 768px) / 2));
 }
 .user-message .message-inner {
@@ -360,13 +393,17 @@ body {
 }
 .user-message .avatar {
     order: 2;
+    margin-top: 2px;
 }
 .user-message .message-text {
-    flex: initial;
+    flex: initial*/
+    width: fit-content;
+    max-width: 100%;
     background: var(--user);
-    padding: 12px 16px;
+    padding: 10px 14px;
     border-radius: 18px 18px 4px 18px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+    line-height: 1.5;
 }
 
 /* AI message text */
