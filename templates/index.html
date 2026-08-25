@@ -380,23 +380,26 @@ body {
     justify-content: center;
 }
 
-/* USER messages - right aligned (no big empty box) */
+/* USER messages - right aligned + compact bubble */
 .user-message {
     justify-content: flex-end;
-    align-items: flex-start;
     padding-right: max(12px, calc((100% - 768px) / 2));
 }
+
 .user-message .message-inner {
     width: fit-content;
     max-width: min(80%, 560px);
     justify-content: flex-end;
+    align-items: flex-start;
 }
+
 .user-message .avatar {
     order: 2;
     margin-top: 2px;
 }
+
 .user-message .message-text {
-    flex: initial*/
+    flex: none !important;
     width: fit-content;
     max-width: 100%;
     background: var(--user);
@@ -409,6 +412,7 @@ body {
 /* AI message text */
 .ai-message .message-text {
     padding-right: 8px;
+}
 }
 /* =========================================================
    IMAGE IN MESSAGE
