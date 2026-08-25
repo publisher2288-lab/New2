@@ -273,19 +273,18 @@ body {
     font-size: 11px;
 }
 /* =========================================================
-   CHAT (Pro Layout)
+   CHAT (Pro Layout - Fixed empty box)
 ========================================================= */
 .chat {
     flex: 1;
     overflow-y: auto;
-    padding: 20px 16px 180px;
+    padding: 20px 12px 180px;
     scroll-behavior: smooth;
 }
 .message {
     width: 100%;
     display: flex;
-    justify-content: center;
-    padding: 10px 0;
+    padding: 8px 0;
 }
 .message-inner {
     width: 100%;
@@ -321,7 +320,7 @@ body {
     white-space: pre-wrap;
     word-break: break-word;
 }
-/* Markdown styling */
+/* Markdown */
 .message-text strong { font-weight: 700; }
 .message-text em { font-style: italic; }
 .message-text code {
@@ -343,10 +342,20 @@ body {
 }
 .message-text li { margin: 3px 0; }
 .message-text p { margin: 6px 0; }
-/* =========================================================
-   USER MESSAGE (Pro right-aligned)
-========================================================= */
+
+/* AI messages - center */
+.ai-message {
+    justify-content: center;
+}
+
+/* USER messages - right aligned (no big empty box) */
+.user-message {
+    justify-content: flex-end;
+    padding-right: max(12px, calc((100% - 768px) / 2));
+}
 .user-message .message-inner {
+    width: fit-content;
+    max-width: min(80%, 560px);
     justify-content: flex-end;
 }
 .user-message .avatar {
@@ -354,15 +363,13 @@ body {
 }
 .user-message .message-text {
     flex: initial;
-    max-width: min(80%, 560px);
     background: var(--user);
     padding: 12px 16px;
     border-radius: 18px 18px 4px 18px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
 }
-/* =========================================================
-   AI MESSAGE
-========================================================= */
+
+/* AI message text */
 .ai-message .message-text {
     padding-right: 8px;
 }
@@ -617,7 +624,7 @@ textarea::placeholder {
         padding: 12px 8px 170px;
     }
     .message {
-        padding: 8px 0;
+        padding: 6px 0;
     }
     .message-inner {
         gap: 10px;
@@ -628,8 +635,13 @@ textarea::placeholder {
         height: 28px;
         font-size: 12px;
     }
-    .user-message .message-text {
+    .user-message {
+        padding-right: 8px;
+    }
+    .user-message .message-inner {
         max-width: 85%;
+    }
+    .user-message .message-text {
         padding: 10px 14px;
         border-radius: 16px 16px 4px 16px;
     }
@@ -912,7 +924,7 @@ if (SpeechRecognition) {
         console.error("Speech error:", event.error);
         stopListening();
         if (event.error === "not-allowed") {
-            alert("Microphone permission बंद है। Address bar में 🔒 पर क्लिक करके Microphone को Allow करें।");
+            alert("Microphone permission बंद है। Address bar में 🔒 पर क्लिक करके Microphone ko Allow करें।");
         } else if (event.error === "no-speech") {
             console.log("No speech detected.");
         } else if (event.error === "audio-capture") {
@@ -961,26 +973,18 @@ function speakText(text) {
 function markdownToHTML(text) {
     if (!text) return "";
     let html = escapeHTML(text);
-    // Code blocks
     html = html.replace(/```([\s\S]*?)```/g, (match, code) => {
         return `<pre style="background:var(--surface);padding:10px;border-radius:8px;overflow-x:auto;margin:8px 0;"><code>${code.trim()}</code></pre>`;
     });
-    // Inline code
     html = html.replace(/`([^`]+)`/g, "<code>$1</code>");
-    // Headings
     html = html.replace(/^### (.+)$/gm, "<h3>$1</h3>");
     html = html.replace(/^## (.+)$/gm, "<h2>$1</h2>");
     html = html.replace(/^# (.+)$/gm, "<h1>$1</h1>");
-    // Bold
     html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
-    // Italic
     html = html.replace(/(^|[^*])\*([^*]+)\*(?!\*)/g, "$1<em>$2</em>");
-    // Unordered lists
     html = html.replace(/^\s*[-*] (.+)$/gm, "<li>$1</li>");
     html = html.replace(/(<li>.*<\/li>)/gs, "<ul>$1</ul>");
-    // Numbered lists
     html = html.replace(/^\s*\d+\. (.+)$/gm, "<li>$1</li>");
-    // Double newlines
     html = html.replace(/\n\n/g, "<br><br>");
     return html;
 }
@@ -995,7 +999,6 @@ async function sendMessage() {
     const currentFile = selectedFile;
     input.value = "";
     resizeInput();
-    // USER MESSAGE
     let imageHTML = "";
     if (currentFile) {
         const imageURL = URL.createObjectURL(currentFile);
@@ -1015,7 +1018,6 @@ async function sendMessage() {
     `);
     scrollBottom();
     clearAttachment();
-    // LOADING
     const loadingId = "loading-" + Date.now();
     chat.insertAdjacentHTML("beforeend", `
         <div class="message ai-message" id="${loadingId}">
@@ -1029,11 +1031,9 @@ async function sendMessage() {
         </div>
     `);
     scrollBottom();
-    // FORM DATA
     const formData = new FormData();
     formData.append("message", text);
     if (currentFile) formData.append("file", currentFile);
-    // SEND TO BACKEND
     try {
         const response = await fetch("/ask", {
             method: "POST",
@@ -1046,7 +1046,6 @@ async function sendMessage() {
         const reply = data.reply || "कोई जवाब नहीं मिला।";
         addAIMessage(reply);
         scrollBottom();
-        // Auto-speak hata diya
     } catch (error) {
         console.error("AskGemi error:", error);
         const loading = document.getElementById(loadingId);
