@@ -183,40 +183,43 @@ body {
 
 /* USER - right + tight bubble */
 .user-message {
-    justify-content: flex-end;
+    justify-content: flex-end !important;
     padding-right: max(12px, calc((100% - 768px) / 2));
 }
 .user-message .message-inner {
-    width: fit-content;
-    max-width: min(85%, 520px);
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    align-items: flex-end;
-    gap: 10px;
+    width: fit-content !important;
+    max-width: min(85%, 500px) !important;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: flex-end !important;
+    align-items: flex-end !important;
+    gap: 10px !important;
+    margin-left: auto;
 }
 .user-message .avatar {
-    order: 2;
-    margin-top: 0;
-    margin-bottom: 2px;
+    order: 2 !important;
+    margin: 0 0 2px 0 !important;
+    flex-shrink: 0;
 }
 .user-message .message-text {
     flex: 0 0 auto !important;
-    width: fit-content;
-    max-width: 100%;
-    min-width: 0;
-    height: auto;
-    min-height: 0;
-    background: var(--user);
-    padding: 9px 14px;
-    border-radius: 18px 18px 4px 18px;
+    width: fit-content !important;
+    max-width: 100% !important;
+    min-width: unset !important;
+    height: auto !important;
+    min-height: unset !important;
+    background: var(--user) !important;
+    padding: 8px 14px !important;
+    border-radius: 18px 18px 4px 18px !important;
     box-shadow: 0 1px 3px rgba(0,0,0,0.18);
-    line-height: 1.45;
+    line-height: 1.4 !important;
     word-break: break-word;
     white-space: pre-wrap;
+    display: inline-block !important;
 }
 .ai-message .message-text {
     padding-right: 12px;
+}
 }
 }
 
@@ -328,11 +331,10 @@ textarea::placeholder { color: var(--muted); }
     .message-inner { gap: 10px; font-size: 14.5px; }
     .avatar { width: 28px; height: 28px; font-size: 12px; }
     .user-message { padding-right: 8px; }
-    .user-message { padding-right: 8px; }
-.user-message .message-inner { max-width: 88%; }
+.user-message .message-inner { max-width: 88% !important; }
 .user-message .message-text {
-    padding: 8px 13px;
-    border-radius: 16px 16px 4px 16px;
+    padding: 7px 12px !important;
+    border-radius: 16px 16px 4px 16px !important;
 }
     }
     .input-area {
